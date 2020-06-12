@@ -1,0 +1,28 @@
+Package: idtreesextraction
+Title: Extract data for Jeepers Treepers IDTreeS 2020 team
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Max",
+           family = "Joseph",
+           role = c("aut", "cre"),
+           email = "maxwell.b.joseph@colorado.edu",
+           comment = c(ORCID = "0000-0002-7745-9990"))
+Description: Extracts training and test data for IDTreeS 2020.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports: 
+    magrittr,
+    pbapply,
+    dplyr,
+    tidyr,
+    sf,
+    tibble,
+    raster,
+    here
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
