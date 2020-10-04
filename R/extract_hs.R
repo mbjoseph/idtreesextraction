@@ -3,7 +3,6 @@
 #' @export
 extract_hs <- function(site, group) {
   itc_data <- load_itcs(site, group)
-  
   data_dirs <- list.dirs(path = file.path("data", group), 
                          recursive = TRUE, full.names = TRUE)
   data_dirs <- data_dirs[!grepl(pattern = "task1", data_dirs)]
@@ -18,7 +17,7 @@ extract_hs <- function(site, group) {
   dir.create(outdir, showWarnings = FALSE)
   
   cl <- parallel::makeCluster(parallel::detectCores())
-  parallel::clusterExport(varlist = c("itc_data", "outdir"), cl = cl)
+  parallel::clusterExport(varlist = c("itc_data", "outdir"), cl = cl, envir = environment())
   pbapply::pblapply(hsi_files, 
            FUN = function(file) {
              itc_subset <- sf::st_buffer(
@@ -31,7 +30,13 @@ extract_hs <- function(site, group) {
                outfile <- file.path(outdir, 
                                     paste0(itc_subset$indvdID[i], ".tif"))
                tmpout <- paste0(tempfile(), ".gpkg")
+               if (file.exists(tmpout)) {
+                 unlink(tmpout)
+               }
                sf::st_write(itc_subset[i, ], tmpout, delete_dsn = TRUE)
+               if (file.exists(outfile)) {
+                 unlink(outfile)
+               }
                system(
                  paste("gdalwarp -cutline", tmpout, 
                        "-crop_to_cutline", file, outfile))
